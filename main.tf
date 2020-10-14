@@ -2,6 +2,7 @@ resource "google_compute_instance" "node-svc-01" {
   name         = "node-svc-01"
   machine_type = "f1-micro"
   zone         = "us-central1-c"
+  allow_stopping_for_update = true
 
   # boot disk specifications
   boot_disk {

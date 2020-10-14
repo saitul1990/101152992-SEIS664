@@ -1,5 +1,5 @@
 provider "google" {
   version = "~> 2.5.0"
-  project = "YOU MUST PUT YOUR PROJECT NAME HERE"
+  project = "boreal-mode-289323"
   region  = "us-central1-c"
 }
