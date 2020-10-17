@@ -8,11 +8,15 @@
 # ./install-node-svc.sh
 # We do this because of scoping and environment variables. 
 
-NODE_IP_01=$(gcloud --format="value(networkInterfaces[0].accessConfigs[0].natIP)" compute instances describe node-svc-01) # get IP of VM
+NODE_IP_01=$(gcloud --format="value(networkInterfaces[0].accessConfigs[0].natIP)" compute instances describe node-svc-01) # get IP of VM1
+NODE_IP_02=$(gcloud --format="value(networkInterfaces[0].accessConfigs[0].natIP)" compute instances describe node-svc-02) # get IP of VM2
 rsh ${NODE_IP_01} -l node-user 'mkdir -p ~/node-svc' # make application directory
+rsh ${NODE_IP_02} -l node-user 'mkdir -p ~/node-svc' # make application directory
 scp -r server.js node-user@${NODE_IP_01}:~/node-svc/ # copy server script
+scp -r server.js node-user@${NODE_IP_02}:~/node-svc/ # copy server script
 scp -r package.json node-user@${NODE_IP_01}:~/node-svc/ # copy Node packages
+scp -r package.json node-user@${NODE_IP_02}:~/node-svc/ # copy Node packages
 rsh ${NODE_IP_01} -l node-user 'cd ~/node-svc && npm install' # install app
-rsh ${NODE_IP_01} -l node-user 'sudo nodejs ~/node-svc/server.js'  # run app 
-
-
+rsh ${NODE_IP_02} -l node-user 'cd ~/node-svc && npm install' # install app
+rsh ${NODE_IP_01} -l node-user 'sudo nodejs ~/node-svc/server.js'  # run app
+rsh ${NODE_IP_02} -l node-user 'sudo nodejs ~/node-svc/server.js'  # run app
